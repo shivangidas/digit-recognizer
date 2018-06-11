@@ -12,7 +12,9 @@ $(document).ready(function () {
 	var ctx;
 	var canvas = document.getElementById("myCanvas");
 	var ctx = canvas.getContext("2d");
-	ctx.strokeStyle = "#000000";
+	ctx.fillStyle = "black";
+	ctx.fillRect(0, 0, canvas.width, canvas.height);
+	ctx.strokeStyle = "#fff";
 	ctx.lineWidth = 5;
 	//we need 28*28
 	var scaledCanvas = document.getElementById('scaledCanvas');
@@ -161,6 +163,9 @@ $(document).ready(function () {
 	function clearArea() {
 		canvas.width = canvas.width;
 		scaledCanvas.width = scaledCanvas.width;
+		ctx.fillStyle = "black";
+		ctx.fillRect(0, 0, canvas.width, canvas.height);
+		ctx.strokeStyle = "#fff";
 		ctx.lineWidth = 5;
 		$('#guessNumber').html("");
 	}
@@ -302,26 +307,47 @@ async function train() {
 }
 
 async function showPredictions(imageData) {
-	//const imageTensor = image;
-	//image = tf.tensor(image.data[28,28,1],[28,28,1],'float32')
+
 	tf.tidy(() => {
 		// Convert the canvas pixels to 
 		let img = tf.fromPixels(imageData, 1);
 		img = img.reshape([-1, 28, 28, 1]);
 		img = tf.cast(img, 'float32');
-
 		const output = model.predict(img);
-		//console.log(img.shape);
-		//console.log(output.dataSync());
 		const axis = 1;
-		//const labels = Array.from(batch.labels.argMax(axis).dataSync());
 		const predictions = Array.from(output.argMax(axis).dataSync());
 		$('#guessNumber').html(predictions[0]);
-		//console.log(predictions);
-
-		//ui.showTestResults(batch, predictions, labels);
 	});
 }
+// async function showPredictions1() {
+// 	const testExamples = 100;
+// 	const batch = data.nextTestBatch(testExamples);
+  
+// 	// Code wrapped in a tf.tidy() function callback will have their tensors freed
+// 	// from GPU memory after execution without having to call dispose().
+// 	// The tf.tidy callback runs synchronously.
+// 	tf.tidy(() => {
+// 	  const output = model.predict(batch.xs.reshape([-1, 28, 28, 1]));
+  
+// 	  // tf.argMax() returns the indices of the maximum values in the tensor along
+// 	  // a specific axis. Categorical classification tasks like this one often
+// 	  // represent classes as one-hot vectors. One-hot vectors are 1D vectors with
+// 	  // one element for each output class. All values in the vector are 0
+// 	  // except for one, which has a value of 1 (e.g. [0, 0, 0, 1, 0]). The
+// 	  // output from model.predict() will be a probability distribution, so we use
+// 	  // argMax to get the index of the vector element that has the highest
+// 	  // probability. This is our prediction.
+// 	  // (e.g. argmax([0.07, 0.1, 0.03, 0.75, 0.05]) == 3)
+// 	  // dataSync() synchronously downloads the tf.tensor values from the GPU so
+// 	  // that we can use them in our normal CPU JavaScript code 
+// 	  // (for a non-blocking version of this function, use data()).
+// 	  const axis = 1;
+// 	  const labels = Array.from(batch.labels.argMax(axis).dataSync());
+// 	  const predictions = Array.from(output.argMax(axis).dataSync());
+  
+// 	  ui.showTestResults(batch, predictions, labels);
+// 	});
+//   }
 
 let data;
 async function load() {
@@ -332,6 +358,6 @@ async function load() {
 async function mnist() {
 	await load();
 	await train();
-	//showPredictions();
+	//showPredictions1();
 }
 mnist();
