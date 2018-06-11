@@ -1,17 +1,20 @@
-#myCanvas{
+canvas {
     border: 1px solid black;
 }
+
 .guessButton {
     color: #fff;
     background-color: #5cb85c;
     border-color: #4cae4c;
 }
-.clearButton{
+
+.clearButton {
     color: #fff;
     background-color: #d9534f;
     border-color: #d43f3a;
 }
-.button{
+
+.button {
     display: inline-block;
     padding: 6px 12px;
     margin-bottom: 0;
@@ -31,4 +34,38 @@
     background-image: none;
     border: 1px solid transparent;
     border-radius: 4px;
+}
+
+.prediction-canvas {
+    width: 100px;
+}
+
+.pred {
+    font-size: 20px;
+    line-height: 25px;
+    width: 100px;
+}
+
+.pred-correct {
+    background-color: #00cf00;
+}
+
+.pred-incorrect {
+    background-color: red;
+}
+
+.pred-container {
+    display: inline-block;
+    width: 100px;
+    margin: 10px;
+}
+
+#lossCanvas>div,
+#accuracyCanvas>div {
+    display: none;
+}
+
+.canvases {
+    display: inline-block;
+    width: 460px;
 }

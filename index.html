@@ -1,17 +1,38 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="utf-8" />
     <title>I understand numbers</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="index.css" rel="stylesheet" type="text/css">
-    
+
 </head>
+
 <body>
     <h1>Draw me a number to read</h1>
-    <canvas id="myCanvas" height="280" width="280"></canvas><br>
-    <button type="button" class="button guessButton">Who am I?</button> 
-    <button type="button" class="button clearButton" >Clear</button>
+    <canvas id="myCanvas" height="280" width="280"></canvas>
+    <canvas id="scaledCanvas" height="28" width="28"></canvas>
+    <br>
+    <button type="button" class="button guessButton">Who am I?</button>
+    <button type="button" class="button clearButton">Clear</button>
+    <h2>My guess is
+        <label id="guessNumber"></label>
+    </h2>
+    <div id="status">Loading data...</div>
+    <div id="message"></div>
+
+    <div id="stats">
+        <div class="canvases">
+            <div class="label" id="loss-label"></div>
+            <div id="lossCanvas"></div>
+        </div>
+        <div class="canvases">
+            <div class="label" id="accuracy-label"></div>
+            <div id="accuracyCanvas"></div>
+        </div>
+    </div>
     <script src="main.js"></script>
 </body>
+
 </html>
