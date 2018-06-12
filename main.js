@@ -203,7 +203,7 @@ const model = tf.sequential();
 
 model.add(tf.layers.conv2d({
 	inputShape: [28, 28, 1],
-	kernelSize: 5,
+	kernelSize: 3,
 	filters: 8,
 	strides: 1,
 	activation: 'relu',
@@ -214,8 +214,19 @@ model.add(tf.layers.maxPooling2d({
 	strides: [2, 2]
 }));
 model.add(tf.layers.conv2d({
-	kernelSize: 5,
+	kernelSize: 2,
 	filters: 16,
+	strides: 1,
+	activation: 'relu',
+	kernelInitializer: 'varianceScaling'
+}));
+model.add(tf.layers.maxPooling2d({
+	poolSize: [2, 2],
+	strides: [2, 2]
+}));
+model.add(tf.layers.conv2d({
+	kernelSize: 2,
+	filters: 32,
 	strides: 1,
 	activation: 'relu',
 	kernelInitializer: 'varianceScaling'
@@ -240,7 +251,7 @@ model.compile({
 });
 
 const BATCH_SIZE = 64;
-const TRAIN_BATCHES = 150;
+const TRAIN_BATCHES = 200;
 // Every few batches, test accuracy over many examples. Ideally, we'd compute
 // accuracy over the whole test set, but for performance we'll use a subset.
 const TEST_BATCH_SIZE = 1000;
