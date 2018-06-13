@@ -357,10 +357,10 @@ async function load() {
 }
 
 async function mnist() {
-	await load();
-	await train();
-	await model.save('downloads://my-model-1');
-	//await tf.loadModel('https://raw.githubusercontent.com/shivangidas/digit-recognizer/master/model/my-model-1.json');
+	//await load();
+	//await train();
+	//await model.save('downloads://my-model-1');
+	await tf.loadModel('https://raw.githubusercontent.com/shivangidas/digit-recognizer/master/model/my-model-1.json');
 	//showPredictions1();
 }
 mnist();
