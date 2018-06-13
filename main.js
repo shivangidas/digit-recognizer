@@ -203,7 +203,7 @@ const model = tf.sequential();
 
 model.add(tf.layers.conv2d({
 	inputShape: [28, 28, 1],
-	kernelSize: 3,
+	kernelSize: 5,
 	filters: 8,
 	strides: 1,
 	activation: 'relu',
@@ -214,7 +214,7 @@ model.add(tf.layers.maxPooling2d({
 	strides: [2, 2]
 }));
 model.add(tf.layers.conv2d({
-	kernelSize: 2,
+	kernelSize: 5,
 	filters: 16,
 	strides: 1,
 	activation: 'relu',
@@ -224,17 +224,7 @@ model.add(tf.layers.maxPooling2d({
 	poolSize: [2, 2],
 	strides: [2, 2]
 }));
-model.add(tf.layers.conv2d({
-	kernelSize: 2,
-	filters: 32,
-	strides: 1,
-	activation: 'relu',
-	kernelInitializer: 'varianceScaling'
-}));
-model.add(tf.layers.maxPooling2d({
-	poolSize: [2, 2],
-	strides: [2, 2]
-}));
+
 model.add(tf.layers.flatten());
 model.add(tf.layers.dense({
 	units: 10,
@@ -370,6 +360,7 @@ async function mnist() {
 	await load();
 	await train();
 	await model.save('downloads://my-model-1');
+	//await tf.loadModel('https://raw.githubusercontent.com/shivangidas/digit-recognizer/master/model/my-model-1.json');
 	//showPredictions1();
 }
 mnist();
