@@ -251,7 +251,7 @@ model.compile({
 });
 
 const BATCH_SIZE = 64;
-const TRAIN_BATCHES = 150;
+const TRAIN_BATCHES = 100;
 // Every few batches, test accuracy over many examples. Ideally, we'd compute
 // accuracy over the whole test set, but for performance we'll use a subset.
 const TEST_BATCH_SIZE = 1000;
@@ -282,7 +282,7 @@ async function train() {
 			batch.xs.reshape([BATCH_SIZE, 28, 28, 1]), batch.labels, {
 				batchSize: BATCH_SIZE,
 				validationData,
-				epochs: 1
+				epochs: 2
 			});
 
 		const loss = history.history.loss[0];
@@ -369,6 +369,7 @@ async function load() {
 async function mnist() {
 	await load();
 	await train();
+	await model.save('downloads://my-model-1');
 	//showPredictions1();
 }
 mnist();
