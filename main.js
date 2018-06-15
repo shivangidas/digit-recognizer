@@ -382,6 +382,6 @@ async function mnist() {
 	//const weightsUpload = document.getElementById("weightsFile");
 	//model1 = await tf.loadModel(tf.io.browserFiles([jsonUpload.files[0], weightsUpload.files[0]]));
 }
-$("#addModelButton").click(function () {
+//$("#addModelButton").click(function () {
 	mnist();
-});
+//});
