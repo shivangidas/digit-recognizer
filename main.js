@@ -3,8 +3,8 @@ import $ from "jquery";
 import * as tf from "@tensorflow/tfjs";
 import {
 	MnistData
-} from './data';
-import * as ui from './ui';
+} from "./data";
+import * as ui from "./ui";
 $(document).ready(function () {
 	//console.log('hello world');
 	var mousePressed = false;
@@ -17,8 +17,8 @@ $(document).ready(function () {
 	ctx.strokeStyle = "#fff";
 	ctx.lineWidth = 5;
 	//we need 28*28
-	var scaledCanvas = document.getElementById('scaledCanvas');
-	var scaledContext = scaledCanvas.getContext('2d');
+	var scaledCanvas = document.getElementById("scaledCanvas");
+	var scaledContext = scaledCanvas.getContext("2d");
 	scaledCanvas.width = 28;
 	scaledCanvas.height = 28;
 	// Set up mouse events for drawing
@@ -167,14 +167,19 @@ $(document).ready(function () {
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 		ctx.strokeStyle = "#fff";
 		ctx.lineWidth = 5;
-		$('#guessNumber').html("");
+		$("#guessNumber").html("");
 	}
 
 	function saveAsImage() {
 		scaledContext.scale(0.1, 0.1);
 		scaledContext.drawImage(canvas, 0, 0);
 		tf.tidy(() => {
-			var imageData = scaledContext.getImageData(0, 0, scaledCanvas.width, scaledCanvas.height);
+			var imageData = scaledContext.getImageData(
+				0,
+				0,
+				scaledCanvas.width,
+				scaledCanvas.height
+			);
 			var data = imageData.data;
 
 			for (var i = 0; i < data.length; i += 4) {
@@ -187,8 +192,7 @@ $(document).ready(function () {
 			scaledContext.putImageData(imageData, 0, 0);
 			//image.print();
 			showPredictions(imageData);
-		})
-
+		});
 	}
 	$(".clearButton").click(function (event) {
 		event.preventDefault();
@@ -201,47 +205,57 @@ $(document).ready(function () {
 });
 const model = tf.sequential();
 
-model.add(tf.layers.conv2d({
-	inputShape: [28, 28, 1],
-	kernelSize: 5,
-	filters: 8,
-	strides: 1,
-	activation: 'relu',
-	kernelInitializer: 'varianceScaling'
-}));
-model.add(tf.layers.maxPooling2d({
-	poolSize: [2, 2],
-	strides: [2, 2]
-}));
-model.add(tf.layers.conv2d({
-	kernelSize: 5,
-	filters: 16,
-	strides: 1,
-	activation: 'relu',
-	kernelInitializer: 'varianceScaling'
-}));
-model.add(tf.layers.maxPooling2d({
-	poolSize: [2, 2],
-	strides: [2, 2]
-}));
+model.add(
+	tf.layers.conv2d({
+		inputShape: [28, 28, 1],
+		kernelSize: 5,
+		filters: 8,
+		strides: 1,
+		activation: "relu",
+		kernelInitializer: "varianceScaling"
+	})
+);
+model.add(
+	tf.layers.maxPooling2d({
+		poolSize: [2, 2],
+		strides: [2, 2]
+	})
+);
+model.add(
+	tf.layers.conv2d({
+		kernelSize: 5,
+		filters: 16,
+		strides: 1,
+		activation: "relu",
+		kernelInitializer: "varianceScaling"
+	})
+);
+model.add(
+	tf.layers.maxPooling2d({
+		poolSize: [2, 2],
+		strides: [2, 2]
+	})
+);
 
 model.add(tf.layers.flatten());
-model.add(tf.layers.dense({
-	units: 10,
-	kernelInitializer: 'varianceScaling',
-	activation: 'softmax'
-}));
+model.add(
+	tf.layers.dense({
+		units: 10,
+		kernelInitializer: "varianceScaling",
+		activation: "softmax"
+	})
+);
 
 const LEARNING_RATE = 0.15;
 const optimizer = tf.train.sgd(LEARNING_RATE);
 model.compile({
 	optimizer: optimizer,
-	loss: 'categoricalCrossentropy',
-	metrics: ['accuracy'],
+	loss: "categoricalCrossentropy",
+	metrics: ["accuracy"]
 });
 
 const BATCH_SIZE = 64;
-const TRAIN_BATCHES = 100;
+const TRAIN_BATCHES = 200;
 // Every few batches, test accuracy over many examples. Ideally, we'd compute
 // accuracy over the whole test set, but for performance we'll use a subset.
 const TEST_BATCH_SIZE = 1000;
@@ -262,35 +276,38 @@ async function train() {
 		if (i % TEST_ITERATION_FREQUENCY === 0) {
 			testBatch = data.nextTestBatch(TEST_BATCH_SIZE);
 			validationData = [
-				testBatch.xs.reshape([TEST_BATCH_SIZE, 28, 28, 1]), testBatch.labels
+				testBatch.xs.reshape([TEST_BATCH_SIZE, 28, 28, 1]),
+				testBatch.labels
 			];
 		}
 
 		// The entire dataset doesn't fit into memory so we call fit repeatedly
 		// with batches.
 		const history = await model.fit(
-			batch.xs.reshape([BATCH_SIZE, 28, 28, 1]), batch.labels, {
+			batch.xs.reshape([BATCH_SIZE, 28, 28, 1]),
+			batch.labels, {
 				batchSize: BATCH_SIZE,
 				validationData,
 				epochs: 2
-			});
+			}
+		);
 
 		const loss = history.history.loss[0];
 		const accuracy = history.history.acc[0];
 
 		// Plot loss / accuracy.
 		lossValues.push({
-			'batch': i,
-			'loss': loss,
-			'set': 'train'
+			batch: i,
+			loss: loss,
+			set: "train"
 		});
 		ui.plotLosses(lossValues);
 
 		if (testBatch != null) {
 			accuracyValues.push({
-				'batch': i,
-				'accuracy': accuracy,
-				'set': 'train'
+				batch: i,
+				accuracy: accuracy,
+				set: "train"
 			});
 			ui.plotAccuracies(accuracyValues);
 			//console.log(accuracy.dataSync());
@@ -308,28 +325,27 @@ async function train() {
 }
 
 async function showPredictions(imageData) {
-
 	tf.tidy(() => {
-		// Convert the canvas pixels to 
+		// Convert the canvas pixels to
 		let img = tf.fromPixels(imageData, 1);
 		img = img.reshape([-1, 28, 28, 1]);
-		img = tf.cast(img, 'float32');
-		const output = model.predict(img);
+		img = tf.cast(img, "float32");
+		const output = model1.predict(img);
 		const axis = 1;
 		const predictions = Array.from(output.argMax(axis).dataSync());
-		$('#guessNumber').html(predictions[0]);
+		$("#guessNumber").html(predictions[0]);
 	});
 }
 // async function showPredictions1() {
 // 	const testExamples = 100;
 // 	const batch = data.nextTestBatch(testExamples);
-  
+
 // 	// Code wrapped in a tf.tidy() function callback will have their tensors freed
 // 	// from GPU memory after execution without having to call dispose().
 // 	// The tf.tidy callback runs synchronously.
 // 	tf.tidy(() => {
 // 	  const output = model.predict(batch.xs.reshape([-1, 28, 28, 1]));
-  
+
 // 	  // tf.argMax() returns the indices of the maximum values in the tensor along
 // 	  // a specific axis. Categorical classification tasks like this one often
 // 	  // represent classes as one-hot vectors. One-hot vectors are 1D vectors with
@@ -340,12 +356,12 @@ async function showPredictions(imageData) {
 // 	  // probability. This is our prediction.
 // 	  // (e.g. argmax([0.07, 0.1, 0.03, 0.75, 0.05]) == 3)
 // 	  // dataSync() synchronously downloads the tf.tensor values from the GPU so
-// 	  // that we can use them in our normal CPU JavaScript code 
+// 	  // that we can use them in our normal CPU JavaScript code
 // 	  // (for a non-blocking version of this function, use data()).
 // 	  const axis = 1;
 // 	  const labels = Array.from(batch.labels.argMax(axis).dataSync());
 // 	  const predictions = Array.from(output.argMax(axis).dataSync());
-  
+
 // 	  ui.showTestResults(batch, predictions, labels);
 // 	});
 //   }
@@ -355,12 +371,17 @@ async function load() {
 	data = new MnistData();
 	await data.load();
 }
-
+var model1;
 async function mnist() {
 	//await load();
 	//await train();
-	//await model.save('downloads://my-model-1');
-	await tf.loadModel('https://raw.githubusercontent.com/shivangidas/digit-recognizer/master/model/my-model-1.json');
+	//await model.save("downloads://my-model-1");
+	model1 = await tf.loadModel('https://raw.githubusercontent.com/shivangidas/digit-recognizer/master/model/my-model-1.json');
 	//showPredictions1();
+	//const jsonUpload = document.getElementById("modelFile");
+	//const weightsUpload = document.getElementById("weightsFile");
+	//model1 = await tf.loadModel(tf.io.browserFiles([jsonUpload.files[0], weightsUpload.files[0]]));
 }
-mnist();
+$("#addModelButton").click(function () {
+	mnist();
+});
