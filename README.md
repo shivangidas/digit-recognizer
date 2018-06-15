@@ -9,4 +9,9 @@ Using Tensorflow.js
 2. run 'npm install'
 3. run 'parcel index.html --open'
 
+## Try your own model
+1. Go to index.js 
+2. Edit model
+3. Uncomment training code, comment code for pretrained model 'model1'
+
 ### Credit where credit is due: This has been built on top of https://js.tensorflow.org/tutorials/mnist.html 
