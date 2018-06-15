@@ -4,7 +4,7 @@ import * as tf from "@tensorflow/tfjs";
 import {
 	MnistData
 } from "./data";
-import * as ui from "./ui";
+//import * as ui from "./ui";
 $(document).ready(function () {
 	//console.log('hello world');
 	var mousePressed = false;
@@ -262,7 +262,7 @@ const TEST_BATCH_SIZE = 1000;
 const TEST_ITERATION_FREQUENCY = 5;
 
 async function train() {
-	ui.isTraining();
+	//ui.isTraining();
 
 	const lossValues = [];
 	const accuracyValues = [];
@@ -301,7 +301,7 @@ async function train() {
 			loss: loss,
 			set: "train"
 		});
-		ui.plotLosses(lossValues);
+		//ui.plotLosses(lossValues);
 
 		if (testBatch != null) {
 			accuracyValues.push({
@@ -309,7 +309,7 @@ async function train() {
 				accuracy: accuracy,
 				set: "train"
 			});
-			ui.plotAccuracies(accuracyValues);
+			//ui.plotAccuracies(accuracyValues);
 			//console.log(accuracy.dataSync());
 		}
 
