@@ -11,7 +11,7 @@ Using Tensorflow.js
 
 ## Try your own model
 1. Go to index.js 
-2. Edit model
-3. Uncomment training code, comment code for pretrained model 'model1'
+2. Edit the model
+3. Uncomment the training code, and comment code for pretrained model 'model1'
 
-### Credit where credit is due: This has been built on top of https://js.tensorflow.org/tutorials/mnist.html 
+### Credit: This has been built on top of https://js.tensorflow.org/tutorials/mnist.html 
